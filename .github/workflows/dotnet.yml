@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the code
+      - uses: actions/checkout@v4
+
+      # Install .NET Core SDK and wasm-tools
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # Restore dependencies
+      - name: Restore
+        run: dotnet restore
+
+      # Build
+      - name: Build app
+        run: dotnet build --no-restore
+
+      # xUnit Test
+      - name: Test
+        run: dotnet test --no-build
