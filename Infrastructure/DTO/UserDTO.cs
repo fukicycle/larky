@@ -1,6 +1,8 @@
+using Domain.Entities;
+
 namespace Infrastructure.DTO;
 
-public sealed class UserDTO
+public sealed class UserDTO : DTO<UserDTO>
 {
     public UserDTO(
         Guid id,
@@ -28,4 +30,16 @@ public sealed class UserDTO
     public string? Email { get; }
     public Dictionary<Guid, ProgressDTO> Progresses { get; }
     public Dictionary<Guid, BadgeDTO> Badges { get; }
+
+    protected override bool EqualsCore(UserDTO other)
+    {
+        return Id == other.Id
+            && Name == other.Name
+            && Email == other.Email;
+    }
+
+    protected override int GetHashCodeCore()
+    {
+        return Id.GetHashCode();
+    }
 }

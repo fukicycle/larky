@@ -1,6 +1,8 @@
+using Domain.Entities;
+
 namespace Infrastructure.DTO;
 
-public sealed class BadgeDTO
+public sealed class BadgeDTO : DTO<BadgeDTO>
 {
     public BadgeDTO(
         string name,
@@ -14,4 +16,16 @@ public sealed class BadgeDTO
     public string Name { get; }
     public string Description { get; }
     public string IconPath { get; }
+
+    protected override bool EqualsCore(BadgeDTO other)
+    {
+        return Name == other.Name
+            && Description == other.Description
+            && IconPath == other.IconPath;
+    }
+
+    protected override int GetHashCodeCore()
+    {
+        return Name.GetHashCode();
+    }
 }

@@ -7,7 +7,7 @@
     <base href="/" />
     <link href="css/app.css" rel="stylesheet" />
     <link href="manifest.json" rel="manifest" />
-    
+
     <!-- If you add any scoped CSS files, uncomment the following to load them
     <link href="View.styles.css" rel="stylesheet" /> -->
 </head>
@@ -22,6 +22,29 @@
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyA6OSbf363nepiylhwGkwkA0eXz9Obu5Vs",
+            authDomain: "larky-ebf2c.firebaseapp.com",
+            projectId: "larky-ebf2c",
+            storageBucket: "larky-ebf2c.firebasestorage.app",
+            messagingSenderId: "413968734471",
+            appId: "1:413968734471:web:1ee9456befbe921b620da2",
+            measurementId: "G-9VJSTS681L"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
 </body>
 
 </html>
