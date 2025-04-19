@@ -15,7 +15,7 @@ public sealed class FirebaseRepository<T> : IRepository<T> where T : DTO<T>
     private string _scheme;
     public FirebaseRepository(FirebaseScheme scheme)
     {
-        _scheme = nameof(scheme);
+        _scheme = scheme.ToString();
         _properties = typeof(T).GetProperties();
         _client = new FirebaseClient(URI, new FirebaseOptions
         {
