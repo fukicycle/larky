@@ -43,6 +43,13 @@ body {
     font-style: normal;
 }
 
+.montserrat-400 {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .splash {
     height: 100%;
     display: flex;
@@ -50,4 +57,13 @@ body {
     align-items: center;
     gap: 8px;
     flex-direction: column;
+}
+
+.btn-icon {
+    cursor: pointer;
+    padding: 4px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-radius: 50%;
 }
