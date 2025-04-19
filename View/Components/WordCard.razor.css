@@ -3,6 +3,8 @@
 }
 
 .word-card {
+    max-width: 100%;
+    overflow: auto;
     font-size: 17px;
     background-color: var(--primary-color);
     color: var(--primary-font-color);
@@ -18,7 +20,7 @@
     padding: 32px 0;
     color: inherit;
     font-weight: bold;
-    font-size: 36px;
+    font-size: 32px;
     text-align: center;
 }
 
