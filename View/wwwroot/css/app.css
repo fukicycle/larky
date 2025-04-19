@@ -21,6 +21,7 @@ body,
 
 body {
     background: var(--background-gradient);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .title {
