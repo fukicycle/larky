@@ -31,11 +31,11 @@ jobs:
 
       # Publish
       - name: Publish
-        run: dotnet publish View/View.csproj -p:GHPages=true -c:Release -o:public
+        run: dotnet publish View/View.csproj -p:GHPages=true -c:Release -o:publish
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public/wwwroot
+          path: publish/wwwroot
   
   deploy:
      needs: build
