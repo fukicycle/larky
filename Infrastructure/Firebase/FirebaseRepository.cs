@@ -42,7 +42,7 @@ public sealed class FirebaseRepository<T> : IRepository<T> where T : DTO<T>
     public async Task<IEnumerable<TValue>> GetItemsValueAsync<TValue>(params string[] children)
     {
         var childQuery = _client.Child(_scheme);
-        var query = AppendChild(childQuery, children);
+        var query = BuildChild(childQuery, children);
         var results = await query.OnceAsync<TValue>();
         return results.Select(a => a.Object);
     }
@@ -50,7 +50,7 @@ public sealed class FirebaseRepository<T> : IRepository<T> where T : DTO<T>
     public async Task<TValue> GetItemValueAsync<TValue>(params string[] children)
     {
         var childQuery = _client.Child(_scheme);
-        var query = AppendChild(childQuery, children);
+        var query = BuildChild(childQuery, children);
         return await query.OnceSingleAsync<TValue>();
     }
 
@@ -62,11 +62,11 @@ public sealed class FirebaseRepository<T> : IRepository<T> where T : DTO<T>
     public async Task UpdateItemAsync<TValue>(TValue value, params string[] children)
     {
         var childQuery = _client.Child(_scheme);
-        var query = AppendChild(childQuery, children);
+        var query = BuildChild(childQuery, children);
         await query.PutAsync(value);
     }
 
-    private ChildQuery AppendChild(ChildQuery childQuery, params string[] children)
+    private ChildQuery BuildChild(ChildQuery childQuery, params string[] children)
     {
         if (!children.All(a => _properties.Any(b => b.Name == a)))
         {
