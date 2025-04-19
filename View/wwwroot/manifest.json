@@ -1,10 +1,10 @@
 {
-  "name": "View",
-  "short_name": "View",
+  "name": "Larky",
+  "short_name": "Larky",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#03173d",
+  "background_color": "#70AF93",
+  "theme_color": "#70AF93",
   "prefer_related_applications": false,
   "icons": [
     {
