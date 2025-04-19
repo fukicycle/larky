@@ -1,0 +1,21 @@
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+::deep .nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 80px;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+::deep .nav-link.active {
+    border-bottom: solid 2px var(--accent-color);
+}
