@@ -1,3 +1,24 @@
 ﻿@page "/"
+@if (words == null)
+{
+    <div>読み込み中</div>
+}
+else
+{
+    @foreach (var word in words)
+    {
+        <WordCard Word="@word" />
+    }
+}
+@code {
+    [Inject(Key = nameof(FirebaseScheme.Words))]
+    public IRepository<WordDTO> WordRepository { get; set; } = null!;
 
-<h1>Hello, world!</h1>
+    private IEnumerable<WordDTO>? words { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        words = await WordRepository.GetItemsAsync();
+    }
+}
