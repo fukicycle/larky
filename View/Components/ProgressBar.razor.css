@@ -1,0 +1,24 @@
+.contents-wrapper {
+    padding: 2px;
+}
+
+.progress-wrapper {
+    width: 100%;
+    position: relative;
+    border: solid 2px var(--accent-color);
+    height: 24px;
+    border-radius: 24px;
+    background-color: var(--primary-color);
+    box-sizing: content-box;
+    margin: -2px;
+    overflow: hidden;
+}
+
+.progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 24px;
+    border-radius: 24px;
+    background-color: var(--accent-color);
+}

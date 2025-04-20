@@ -2,6 +2,8 @@ nav {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, .25);
+    padding: 8px 0;
 }
 
 ::deep .nav-link {

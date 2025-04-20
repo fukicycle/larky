@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using View;
+using View.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -17,5 +18,6 @@ builder.Services.AddKeyedSingleton(typeof(IRepository<UserDTO>), nameof(Firebase
 builder.Services.AddKeyedSingleton(typeof(IRepository<WordDTO>), nameof(FirebaseScheme.Words), new FirebaseRepository<WordDTO>(FirebaseScheme.Words));
 builder.Services.AddKeyedSingleton(typeof(IRepository<RankingDTO>), nameof(FirebaseScheme.Rankings), new FirebaseRepository<RankingDTO>(FirebaseScheme.Rankings));
 builder.Services.AddKeyedSingleton(typeof(IRepository<BadgeDTO>), nameof(FirebaseScheme.Badges), new FirebaseRepository<BadgeDTO>(FirebaseScheme.Badges));
+builder.Services.AddScoped<StudyService>();
 
 await builder.Build().RunAsync();

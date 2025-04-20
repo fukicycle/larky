@@ -1,0 +1,25 @@
+.wrapper {
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-gap: 8px;
+}
+
+.contents {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 8px;
+}
+
+.actions>.btn {
+    width: 120px;
+}

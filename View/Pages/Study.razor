@@ -1,0 +1,52 @@
+﻿@page "/study"
+@inject StudyService StudyService
+<Animate Animation="Animations.Fade" class="animation-wrapper">
+    <div class="wrapper">
+        <ProgressBar Current="@(pager?.CurrentIndex + 1)" Total="@pager?.Count" />
+        @if (currentWord == null || pager == null)
+        {
+            <div>読み込み中</div>
+        }
+        else
+        {
+            <div class="contents">
+                <WordCard Word="@currentWord" />
+            </div>
+            <div class="actions">
+                <button class="btn" disabled=@(!pager.CanGoPrev()) @onclick=@GoPrev>前へ</button>
+                <button class="btn" disabled=@(!pager.CanGoNext()) @onclick=@GoNext>次へ</button>
+            </div>
+        }
+    </div>
+</Animate>
+@code {
+    [Inject(Key = nameof(FirebaseScheme.Words))]
+    public IRepository<WordDTO> WordRepository { get; set; } = null!;
+    private WordDTO? currentWord { get; set; }
+    private Pager<WordDTO>? pager { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        //await StudyService.InitializeAsync();
+        var results = await WordRepository.GetItemsAsync();
+        pager = new Pager<WordDTO>(results);
+        currentWord = pager.CurrentValue;
+    }
+
+    private void GoNext()
+    {
+        if (pager!.CanGoNext())
+        {
+            pager.Next();
+            currentWord = pager.CurrentValue;
+        }
+    }
+
+    private void GoPrev()
+    {
+        if (pager!.CanGoPrev())
+        {
+            pager.Prev();
+            currentWord = pager.CurrentValue;
+        }
+    }
+}
