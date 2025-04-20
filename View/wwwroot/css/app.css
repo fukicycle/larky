@@ -22,6 +22,8 @@ body,
 body {
     background: var(--background-gradient);
     padding-bottom: env(safe-area-inset-bottom);
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 .title {
