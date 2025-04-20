@@ -49,6 +49,16 @@
         isShowAnswer = !isShowAnswer;
     }
 
+    protected override void OnParametersSet()
+    {
+        isShowAnswer = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await SpeechAsync();
+    }
+
     private async Task SpeechAsync()
     {
         await SpeechSynthesis.SpeakAsync(Word.Text);
