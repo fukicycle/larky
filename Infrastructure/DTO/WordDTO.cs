@@ -7,21 +7,21 @@ public sealed class WordDTO : DTO<WordDTO>
     public WordDTO(
         Guid id,
         string text,
-        string partOfSpeech,
+        int level,
         string meaning,
         string exampleOfEnglish,
         string exampleOfJapanese)
     {
         Id = id;
         Text = text;
-        PartOfSpeech = partOfSpeech;
+        Level = level;
         Meaning = meaning;
         ExampleOfEnglish = exampleOfEnglish;
         ExampleOfJapanese = exampleOfJapanese;
     }
     public Guid Id { get; }
     public string Text { get; }
-    public string PartOfSpeech { get; }
+    public int Level { get; }
     public string Meaning { get; }
     public string ExampleOfEnglish { get; }
     public string ExampleOfJapanese { get; set; }
@@ -30,7 +30,7 @@ public sealed class WordDTO : DTO<WordDTO>
     {
         return Id == other.Id
             && Text == other.Text
-            && PartOfSpeech == other.PartOfSpeech
+            && Level == other.Level
             && Meaning == other.Meaning
             && ExampleOfEnglish == other.ExampleOfEnglish
             && ExampleOfJapanese == other.ExampleOfJapanese;

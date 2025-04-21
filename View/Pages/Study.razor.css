@@ -2,8 +2,14 @@
     height: 100%;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr) auto;
     grid-gap: 8px;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .contents {
