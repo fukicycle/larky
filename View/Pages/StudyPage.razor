@@ -1,1 +1,68 @@
 ﻿@page "/study"
+@implements IDisposable
+<Animate Animation="Animations.Fade" class="animation-wrapper">
+    @if (pager == null)
+    {
+        <div class="loading">
+            <Loader />
+        </div>
+    }
+    else
+    {
+        <div class="contents">
+            <h3>これはデモ画面です。5秒で次の単語に移動します。</h3>
+            <WordCard IsAlwaysShow="false" Word="@pager.CurrentValue" />
+        </div>
+    }
+</Animate>
+@code {
+    [Inject(Key = nameof(FirebaseScheme.Words))]
+    public IRepository<WordDTO> WordRepository { get; set; } = null!;
+
+    [Inject]
+    public IPersistencer<PersistentStateContainer> Persistencer { get; set; } = null!;
+
+
+    private PersistentStateContainer _container;
+    private WordPager<WordDTO>? pager { get; set; }
+    private bool _isRunning = true;
+    protected override async Task OnInitializedAsync()
+    {
+        var results = await WordRepository.GetItemsAsync();
+        pager = new WordPager<WordDTO>(results);
+        _container = await Persistencer.GetAsync("word");
+        pager.Move(_container.StudyCurrentIndex);
+        _ = Task.Run(async () =>
+        {
+            while (pager.CanGoNext() && _isRunning)
+            {
+                await Task.Delay(5000);
+                GoNext();
+                await InvokeAsync(StateHasChanged);
+            }
+        });
+    }
+
+    private void GoNext()
+    {
+        if (pager?.CanGoNext() == true)
+        {
+            pager.GoNext();
+        }
+    }
+
+    private void GoPrevious()
+    {
+        if (pager?.CanGoPrevious() == true)
+        {
+            pager.GoPrevious();
+        }
+    }
+
+    public async void Dispose()
+    {
+        _isRunning = false;
+        _container.StudyCurrentIndex = pager?.CurrentIndex ?? 0;
+        await Persistencer.SaveAsync("word", _container);
+    }
+}

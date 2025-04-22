@@ -1,9 +1,11 @@
+using Domain.Interfaces;
+
 namespace Domain.Logics;
 
-public sealed class Pager<T>
+public sealed class WordPager<WordDTO> : IPager<WordDTO>
 {
-    private readonly List<T> _items;
-    public Pager(IEnumerable<T> items)
+    private readonly List<WordDTO> _items;
+    public WordPager(IEnumerable<WordDTO> items)
     {
         if (!items.Any())
         {
@@ -16,25 +18,25 @@ public sealed class Pager<T>
 
     public int Count { get; }
     public int CurrentIndex { get; private set; }
-    public T CurrentValue { get; private set; }
+    public WordDTO CurrentValue { get; private set; }
 
     public bool CanGoNext()
     {
         return CurrentIndex < Count - 1;
     }
 
-    public void Next()
+    public void GoNext()
     {
         CurrentIndex++;
         CurrentValue = _items[CurrentIndex];
     }
 
-    public bool CanGoPrev()
+    public bool CanGoPrevious()
     {
         return CurrentIndex > 0;
     }
 
-    public void Prev()
+    public void GoPrevious()
     {
         CurrentIndex--;
         CurrentValue = _items[CurrentIndex];

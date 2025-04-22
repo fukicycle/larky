@@ -9,6 +9,7 @@ using Toolbelt.Blazor.Extensions.DependencyInjection;
 using View;
 using View.Services;
 using Blazored.LocalStorage;
+using Domain.Logics;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

@@ -15,7 +15,7 @@
             </div>
         }
         <div class="actions">
-            <button class="btn" disabled=@(pager?.CanGoPrev() != true) @onclick=@GoPrev>前へ</button>
+            <button class="btn" disabled=@(pager?.CanGoPrevious() != true) @onclick=@GoPrevious>前へ</button>
             <button class="btn" disabled=@(pager?.CanGoNext() != true) @onclick=@GoNext>次へ</button>
         </div>
     </div>
@@ -27,12 +27,13 @@
     [Inject]
     public IPersistencer<PersistentStateContainer> Persistencer { get; set; } = null!;
     
+    
     private PersistentStateContainer _container;
-    private Pager<WordDTO>? pager { get; set; }
+    private WordPager<WordDTO>? pager { get; set; }
     protected override async Task OnInitializedAsync()
     {
         var results = await WordRepository.GetItemsAsync();
-        pager = new Pager<WordDTO>(results);
+        pager = new WordPager<WordDTO>(results);
         _container = await Persistencer.GetAsync("word");
         pager.Move(_container.WordCurrentIndex);
     }
@@ -41,15 +42,15 @@
     {
         if (pager?.CanGoNext() == true)
         {
-            pager.Next();
+            pager.GoNext();
         }
     }
 
-    private void GoPrev()
+    private void GoPrevious()
     {
-        if (pager?.CanGoPrev() == true)
+        if (pager?.CanGoPrevious() == true)
         {
-            pager.Prev();
+            pager.GoPrevious();
         }
     }
 
