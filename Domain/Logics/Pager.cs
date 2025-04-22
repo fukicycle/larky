@@ -39,4 +39,14 @@ public sealed class Pager<T>
         CurrentIndex--;
         CurrentValue = _items[CurrentIndex];
     }
+
+    public void Move(int index)
+    {
+        if(index >= _items.Count)
+        {
+            return;
+        }
+        CurrentIndex = index;
+        CurrentValue = _items[CurrentIndex];
+    }
 }

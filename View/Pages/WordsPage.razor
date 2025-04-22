@@ -1,4 +1,5 @@
 ﻿@page "/words"
+@implements IDisposable
 <Animate Animation="Animations.Fade" class="animation-wrapper">
     <div class="wrapper">
         @if (pager == null)
@@ -22,11 +23,18 @@
 @code {
     [Inject(Key = nameof(FirebaseScheme.Words))]
     public IRepository<WordDTO> WordRepository { get; set; } = null!;
+
+    [Inject]
+    public IPersistencer<PersistentStateContainer> Persistencer { get; set; } = null!;
+    
+    private PersistentStateContainer _container;
     private Pager<WordDTO>? pager { get; set; }
     protected override async Task OnInitializedAsync()
     {
         var results = await WordRepository.GetItemsAsync();
         pager = new Pager<WordDTO>(results);
+        _container = await Persistencer.GetAsync("word");
+        pager.Move(_container.WordCurrentIndex);
     }
 
     private void GoNext()
@@ -43,5 +51,11 @@
         {
             pager.Prev();
         }
+    }
+
+    public async void Dispose()
+    {
+        _container.WordCurrentIndex = pager?.CurrentIndex ?? 0;
+        await Persistencer.SaveAsync("word", _container);
     }
 }
