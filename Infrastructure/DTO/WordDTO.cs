@@ -2,7 +2,7 @@ using Domain.Entities;
 
 namespace Infrastructure.DTO;
 
-public sealed class WordDTO : DTO<WordDTO>
+public sealed class WordDTO : DTO<WordDTO, string>
 {
     public WordDTO(
         Guid id,
@@ -18,13 +18,14 @@ public sealed class WordDTO : DTO<WordDTO>
         Meaning = meaning;
         ExampleOfEnglish = exampleOfEnglish;
         ExampleOfJapanese = exampleOfJapanese;
+        FirstOrderKey = Text;
     }
     public Guid Id { get; }
     public string Text { get; }
     public int Level { get; }
     public string Meaning { get; }
     public string ExampleOfEnglish { get; }
-    public string ExampleOfJapanese { get; set; }
+    public string ExampleOfJapanese { get; }
 
     protected override bool EqualsCore(WordDTO other)
     {

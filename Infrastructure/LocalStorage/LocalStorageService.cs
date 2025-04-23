@@ -11,13 +11,13 @@ public sealed class LocalStorageService<T> : IPersistencer<T> where T : struct
         _localStorageService = localStorageService;
     }
 
-    public async Task<T> GetAsync(string key)
+    public async Task<T> GetAsync(Enum key)
     {
-        return await _localStorageService.GetItemAsync<T>(key);
+        return await _localStorageService.GetItemAsync<T>(key.ToString());
     }
 
-    public async Task SaveAsync(string key, T item)
+    public async Task SaveAsync(Enum key, T item)
     {
-        await _localStorageService.SetItemAsync(key, item);
+        await _localStorageService.SetItemAsync(key.ToString(), item);
     }
 }
