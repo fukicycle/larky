@@ -1,6 +1,7 @@
 ﻿<div class="contents-wrapper">
     <div class="progress-wrapper">
         <div class="progress" style="width: @width%;"></div>
+        <span class="progress-value">@width%</span>
     </div>
 </div>
 @code {
@@ -14,5 +15,6 @@
     protected override void OnParametersSet()
     {
         width = Progress.CalculateValue(Current, Total);
+        StateHasChanged();
     }
 }

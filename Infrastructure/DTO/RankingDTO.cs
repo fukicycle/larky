@@ -2,7 +2,7 @@ using Domain.Entities;
 
 namespace Infrastructure.DTO;
 
-public sealed class RankingDTO : DTO<RankingDTO>
+public sealed class RankingDTO : DTO<RankingDTO, int>
 {
     public RankingDTO(
         Dictionary<Guid, int>? daily,

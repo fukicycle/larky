@@ -2,10 +2,10 @@ using Domain.Interfaces;
 
 namespace Domain.Logics;
 
-public sealed class WordPager<WordDTO> : IPager<WordDTO>
+public sealed class ItemPager<T> : IPager<T>
 {
-    private readonly List<WordDTO> _items;
-    public WordPager(IEnumerable<WordDTO> items)
+    private readonly List<T> _items;
+    public ItemPager(IEnumerable<T> items)
     {
         if (!items.Any())
         {
@@ -18,7 +18,7 @@ public sealed class WordPager<WordDTO> : IPager<WordDTO>
 
     public int Count { get; }
     public int CurrentIndex { get; private set; }
-    public WordDTO CurrentValue { get; private set; }
+    public T CurrentValue { get; private set; }
 
     public bool CanGoNext()
     {

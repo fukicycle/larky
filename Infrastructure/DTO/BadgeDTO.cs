@@ -2,7 +2,7 @@ using Domain.Entities;
 
 namespace Infrastructure.DTO;
 
-public sealed class BadgeDTO : DTO<BadgeDTO>
+public sealed class BadgeDTO : DTO<BadgeDTO, string>
 {
     public BadgeDTO(
         string name,
@@ -12,6 +12,7 @@ public sealed class BadgeDTO : DTO<BadgeDTO>
         Name = name;
         Description = description;
         IconPath = iconPath;
+        FirstOrderKey = name;
     }
     public string Name { get; }
     public string Description { get; }

@@ -2,7 +2,7 @@ using Domain.Entities;
 
 namespace Infrastructure.DTO;
 
-public sealed class UserDTO : DTO<UserDTO>
+public sealed class UserDTO : DTO<UserDTO, string>
 {
     public UserDTO(
         Guid id,
@@ -24,6 +24,7 @@ public sealed class UserDTO : DTO<UserDTO>
             badges = new Dictionary<Guid, BadgeDTO>();
         }
         Badges = badges;
+        FirstOrderKey = name;
     }
     public Guid Id { get; }
     public string Name { get; }

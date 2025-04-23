@@ -2,8 +2,16 @@ using Domain.Entities;
 
 namespace Infrastructure.DTO;
 
-public sealed class ProgressDTO : DTO<ProgressDTO>
+public sealed class ProgressDTO : DTO<ProgressDTO, DateTime>
 {
+    public ProgressDTO(
+        DateTime dateTime, 
+        bool isCorrect)
+    {
+        DateTime = dateTime;
+        IsCorrect = isCorrect;
+        FirstOrderKey = dateTime;
+    }
     public DateTime DateTime { get; }
     public bool IsCorrect { get; }
 

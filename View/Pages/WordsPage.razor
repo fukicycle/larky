@@ -22,19 +22,19 @@
 </Animate>
 @code {
     [Inject(Key = nameof(FirebaseScheme.Words))]
-    public IRepository<WordDTO> WordRepository { get; set; } = null!;
+    public IRepository<WordDTO, string> WordRepository { get; set; } = null!;
 
     [Inject]
     public IPersistencer<PersistentStateContainer> Persistencer { get; set; } = null!;
     
     
     private PersistentStateContainer _container;
-    private WordPager<WordDTO>? pager { get; set; }
+    private ItemPager<WordDTO>? pager { get; set; }
     protected override async Task OnInitializedAsync()
     {
         var results = await WordRepository.GetItemsAsync();
-        pager = new WordPager<WordDTO>(results);
-        _container = await Persistencer.GetAsync("word");
+        pager = new ItemPager<WordDTO>(results);
+        _container = await Persistencer.GetAsync(PersistentType.Word);
         pager.Move(_container.WordCurrentIndex);
     }
 
@@ -57,6 +57,6 @@
     public async void Dispose()
     {
         _container.WordCurrentIndex = pager?.CurrentIndex ?? 0;
-        await Persistencer.SaveAsync("word", _container);
+        await Persistencer.SaveAsync(PersistentType.Word, _container);
     }
 }
