@@ -9,18 +9,19 @@ public sealed class GroupPager<T> : IPager<ItemPager<T>>
     public GroupPager(IEnumerable<T> originalItems, int numberOfPerGroup)
     {
         _originalItems = originalItems.ToList();
+        int numberOfSplit = Convert.ToInt32(Math.Ceiling(_originalItems.Count * 1.0 / numberOfPerGroup));
         _groupItems = _originalItems.Select(item =>
                             new { Index = _originalItems.IndexOf(item), Item = item })
-                                    .GroupBy(itemWithIndex => itemWithIndex.Index % numberOfPerGroup)
+                                    .GroupBy(itemWithIndex => itemWithIndex.Index % numberOfSplit)
                                     .Select(groupingItem => new ItemPager<T>(groupingItem.Select(item => item.Item)))
                                     .ToList();
         NumberOfPerGroup = numberOfPerGroup;
-        Count = Convert.ToInt32(Math.Floor(_originalItems.Count * 1.0 / NumberOfPerGroup));
+        Count = Math.Min(_groupItems[CurrentIndex].Count, NumberOfPerGroup);
         CurrentValue = _groupItems[CurrentIndex];
     }
 
     public int NumberOfPerGroup { get; }
-    public int Count { get; }
+    public int Count { get; private set; }
 
     public int CurrentIndex { get; private set; }
 
@@ -35,6 +36,7 @@ public sealed class GroupPager<T> : IPager<ItemPager<T>>
     {
         CurrentIndex++;
         CurrentValue = _groupItems[CurrentIndex];
+        Count = Math.Min(_groupItems[CurrentIndex].Count, NumberOfPerGroup);
     }
 
     public bool CanGoPrevious()
@@ -46,6 +48,7 @@ public sealed class GroupPager<T> : IPager<ItemPager<T>>
     {
         CurrentIndex--;
         CurrentValue = _groupItems[CurrentIndex];
+        Count = Math.Min(_groupItems[CurrentIndex].Count, NumberOfPerGroup);
     }
 
     public void Move(int index)

@@ -10,6 +10,10 @@
     else
     {
         <div class="contents">
+            <h3>これはデモページです。5秒で自動的に進みます</h3>
+            <div class="progress">
+                <ProgressBar Current="@(pager.CurrentValue.CurrentIndex + 1)" Total="@pager.CurrentValue.Count" />
+            </div>
             <WordCard IsAlwaysShow="false" Word="@pager.CurrentValue.CurrentValue" />
         </div>
     }
@@ -30,10 +34,29 @@
         pager = new GroupPager<WordDTO>(results, 10);
         _container = await Persistencer.GetAsync(PersistentType.Word);
         pager.Move(_container.WordCurrentIndex);
+        int delay = 5000;
+        _ = Task.Run(async () =>
+        {
+            while (pager.CanGoNext() && _isRunning)
+            {
+                while (pager.CurrentValue.CanGoNext() && _isRunning)
+                {
+                    await Task.Delay(delay);
+                    pager.CurrentValue.GoNext();
+                    await InvokeAsync(StateHasChanged);
+                }
+                await Task.Delay(delay);
+                pager.GoNext();
+                await InvokeAsync(StateHasChanged);
+            }
+        });
     }
+
+    private bool _isRunning = true;
 
     public async void Dispose()
     {
+        _isRunning = false;
         _container.StudyCurrentIndex = pager?.CurrentIndex ?? 0;
         await Persistencer.SaveAsync(PersistentType.Word, _container);
     }
