@@ -23,6 +23,7 @@ builder.Services.AddKeyedSingleton(typeof(IRepository<BadgeDTO, string>), nameof
 builder.Services.AddScoped<IPersistencer<PersistentStateContainer>, LocalStorageService<PersistentStateContainer>>();
 builder.Services.AddScoped<WordService>();
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddSingleton<AppStateContainer>();
 
 await builder.Build().RunAsync();
 
