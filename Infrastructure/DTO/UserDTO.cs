@@ -8,12 +8,14 @@ public sealed class UserDTO : DTO<UserDTO, string>
         Guid id,
         string name,
         string? email,
+        int unlockLevel,
         Dictionary<Guid, ProgressDTO>? progresses,
         Dictionary<Guid, BadgeDTO>? badges)
     {
         Id = id;
         Name = name;
         Email = email;
+        UnlockLevel = unlockLevel;
         if (progresses == null)
         {
             progresses = new Dictionary<Guid, ProgressDTO>();
@@ -29,6 +31,7 @@ public sealed class UserDTO : DTO<UserDTO, string>
     public Guid Id { get; }
     public string Name { get; }
     public string? Email { get; }
+    public int UnlockLevel { get; }
     public Dictionary<Guid, ProgressDTO> Progresses { get; }
     public Dictionary<Guid, BadgeDTO> Badges { get; }
 
