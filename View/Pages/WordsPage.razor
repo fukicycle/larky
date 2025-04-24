@@ -21,8 +21,8 @@
     </div>
 </Animate>
 @code {
-    [Inject(Key = nameof(FirebaseScheme.Words))]
-    public IRepository<WordDTO, string> WordRepository { get; set; } = null!;
+    [Inject]
+    public WordService WordService { get; set; } = null!;
 
     [Inject]
     public IPersistencer<PersistentStateContainer> Persistencer { get; set; } = null!;
@@ -32,7 +32,7 @@
     private ItemPager<WordDTO>? pager { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        var results = await WordRepository.GetItemsAsync();
+        var results = await WordService.GetWordsAsync();
         pager = new ItemPager<WordDTO>(results);
         _container = await Persistencer.GetAsync(PersistentType.Word);
         pager.Move(_container.WordCurrentIndex);

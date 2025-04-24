@@ -19,8 +19,8 @@
     }
 </Animate>
 @code {
-    [Inject(Key = nameof(FirebaseScheme.Words))]
-    public IRepository<WordDTO, string> WordRepository { get; set; } = null!;
+    [Inject]
+    public WordService WordService { get; set; } = null!;
 
     [Inject]
     public IPersistencer<PersistentStateContainer> Persistencer { get; set; } = null!;
@@ -30,7 +30,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var results = await WordRepository.GetItemsAsync();
+        var results = await WordService.GetWordsAsync();
         pager = new GroupPager<WordDTO>(results, 10);
         _container = await Persistencer.GetAsync(PersistentType.Word);
         pager.Move(_container.WordCurrentIndex);
@@ -60,4 +60,4 @@
         _container.StudyCurrentIndex = pager?.CurrentIndex ?? 0;
         await Persistencer.SaveAsync(PersistentType.Word, _container);
     }
-}
+}    using View.Services;
