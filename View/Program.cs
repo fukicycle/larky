@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using View;
 using Blazored.LocalStorage;
+using View.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -20,7 +21,9 @@ builder.Services.AddKeyedSingleton(typeof(IRepository<WordDTO, string>), nameof(
 builder.Services.AddKeyedSingleton(typeof(IRepository<RankingDTO, int>), nameof(FirebaseScheme.Rankings), new FirebaseRepository<RankingDTO,int>(FirebaseScheme.Rankings));
 builder.Services.AddKeyedSingleton(typeof(IRepository<BadgeDTO, string>), nameof(FirebaseScheme.Badges), new FirebaseRepository<BadgeDTO, string>(FirebaseScheme.Badges));
 builder.Services.AddScoped<IPersistencer<PersistentStateContainer>, LocalStorageService<PersistentStateContainer>>();
+builder.Services.AddScoped<WordService>();
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddSingleton<AppStateContainer>();
 
 await builder.Build().RunAsync();
 

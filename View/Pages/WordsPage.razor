@@ -1,8 +1,10 @@
 ﻿@page "/words"
+@inject WordService WordService
+@inject IPersistencer<PersistentStateContainer> Persistencer
 @implements IDisposable
 <Animate Animation="Animations.Fade" class="animation-wrapper">
     <div class="wrapper">
-        @if (pager == null)
+        @if (_pager == null)
         {
             <div class="loading">
                 <Loader />
@@ -11,52 +13,45 @@
         else
         {
             <div class="contents">
-                <WordCard IsAlwaysShow="true" Word="@pager.CurrentValue" />
+                <WordCard IsAlwaysShow="true" Word="@_pager.CurrentValue" />
             </div>
         }
         <div class="actions">
-            <button class="btn" disabled=@(pager?.CanGoPrevious() != true) @onclick=@GoPrevious>前へ</button>
-            <button class="btn" disabled=@(pager?.CanGoNext() != true) @onclick=@GoNext>次へ</button>
+            <button class="btn" disabled=@(_pager?.CanGoPrevious() != true) @onclick=@GoPrevious>前へ</button>
+            <button class="btn" disabled=@(_pager?.CanGoNext() != true) @onclick=@GoNext>次へ</button>
         </div>
     </div>
 </Animate>
 @code {
-    [Inject(Key = nameof(FirebaseScheme.Words))]
-    public IRepository<WordDTO, string> WordRepository { get; set; } = null!;
-
-    [Inject]
-    public IPersistencer<PersistentStateContainer> Persistencer { get; set; } = null!;
-    
-    
+    private ItemPager<WordDTO>? _pager;
     private PersistentStateContainer _container;
-    private ItemPager<WordDTO>? pager { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        var results = await WordRepository.GetItemsAsync();
-        pager = new ItemPager<WordDTO>(results);
+        var results = await WordService.GetWordsAsync();
+        _pager = new ItemPager<WordDTO>(results);
         _container = await Persistencer.GetAsync(PersistentType.Word);
-        pager.Move(_container.WordCurrentIndex);
+        _pager.Move(_container.WordCurrentIndex);
     }
 
     private void GoNext()
     {
-        if (pager?.CanGoNext() == true)
+        if (_pager?.CanGoNext() == true)
         {
-            pager.GoNext();
+            _pager.GoNext();
         }
     }
 
     private void GoPrevious()
     {
-        if (pager?.CanGoPrevious() == true)
+        if (_pager?.CanGoPrevious() == true)
         {
-            pager.GoPrevious();
+            _pager.GoPrevious();
         }
     }
 
     public async void Dispose()
     {
-        _container.WordCurrentIndex = pager?.CurrentIndex ?? 0;
+        _container.WordCurrentIndex = _pager?.CurrentIndex ?? 0;
         await Persistencer.SaveAsync(PersistentType.Word, _container);
     }
 }
