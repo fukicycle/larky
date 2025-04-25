@@ -17,7 +17,7 @@
                 <div class="actions">
                     @if (!IsAlwaysShow)
                     {
-                        <button class="btn-icon">
+                        <button class="btn-icon" @onclick=@NotifyOKButtonOnClick>
                             <svg width="48" height="55" viewBox="0 0 48 55" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_694_107)">
                                     <path
@@ -31,7 +31,7 @@
                                 </defs>
                             </svg>
                         </button>
-                        <button class="btn-icon">
+                        <button class="btn-icon" @onclick=@NotifyNGButtonOnClick>
                             <svg width="48" height="64" viewBox="0 0 48 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M42.825 18.8251C44.3875 17.2626 44.3875 14.7251 42.825 13.1626C41.2625 11.6001 38.725 11.6001 37.1625 13.1626L24 26.3376L10.825 13.1751C9.26251 11.6126 6.72501 11.6126 5.16251 13.1751C3.60001 14.7376 3.60001 17.2751 5.16251 18.8376L18.3375 32.0001L5.17501 45.1751C3.61251 46.7376 3.61251 49.2751 5.17501 50.8376C6.73751 52.4001 9.27501 52.4001 10.8375 50.8376L24 37.6626L37.175 50.8251C38.7375 52.3876 41.275 52.3876 42.8375 50.8251C44.4 49.2626 44.4 46.7251 42.8375 45.1626L29.6625 32.0001L42.825 18.8251Z"
@@ -83,6 +83,8 @@
     public WordDTO Word { get; set; } = null!;
     [Parameter]
     public bool IsAlwaysShow { get; set; } = false;
+    [Parameter]
+    public EventCallback<bool> ButtonOnClick { get; set; }
 
     private bool isShowAnswer { get; set; }
     private PersistentSettingContainer _stateContainer;
@@ -99,6 +101,16 @@
             }
             AppStateContainer.SilentModeNotificationConfirm = true;
         }
+    }
+
+    private async Task NotifyOKButtonOnClick()
+    {
+        await ButtonOnClick.InvokeAsync(true);
+    }
+
+    private async Task NotifyNGButtonOnClick()
+    {
+        await ButtonOnClick.InvokeAsync(false);
     }
 
     private void SwitchDisplayMode()

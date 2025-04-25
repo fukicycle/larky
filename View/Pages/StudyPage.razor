@@ -15,7 +15,7 @@
             <div class="progress">
                 <ProgressBar Current="@(_pager.CurrentValue.CurrentIndex + 1)" Total="@_pager.CurrentValue.Count" />
             </div>
-            <WordCard IsAlwaysShow="false" Word="@_pager.CurrentValue.CurrentValue" />
+            <WordCard IsAlwaysShow="false" Word="@_pager.CurrentValue.CurrentValue" ButtonOnClick="ButtonOnClick" />
         </div>
     }
 </Animate>
@@ -37,5 +37,14 @@
     {
         _container.StudyCurrentIndex = _pager?.CurrentIndex ?? 0;
         await Persistencer.SaveAsync(PersistentType.Word, _container);
+    }
+
+    private void ButtonOnClick(bool result)
+    {
+        if (_pager?.CurrentValue?.CanGoNext() == true)
+        {
+            _pager.CurrentValue.GoNext();
+            _ = Task.Run(async () => await Task.Delay(500));//simulate to send result to firebase
+        }
     }
 }
