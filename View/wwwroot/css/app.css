@@ -84,7 +84,7 @@ body {
 
 .btn {
     cursor: pointer;
-    border: none;
+    border: solid 1px var(--accent-color);
     outline: none;
     background-color: var(--accent-color);
     color: var(--accent-font-color);
