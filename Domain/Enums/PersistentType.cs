@@ -2,5 +2,6 @@ namespace Domain.Enums;
 
 public enum PersistentType
 {
-    Word
+    Word,
+    Setting
 }

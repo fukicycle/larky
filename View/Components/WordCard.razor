@@ -1,9 +1,10 @@
 ﻿@inject SpeechSynthesis SpeechSynthesis
-@inject IPersistencer<PersistentStateContainer> Persistencer
+@inject IPersistencer<PersistentSettingContainer> Persistencer
+@inject AppStateContainer AppStateContainer
 <div class="word-card-wrapper">
-    <Animate Animation="Animations.FadeUp">
+    <Animate Animation="Animations.Fade">
         <div class="word-card">
-            <div class="word montserrat-900" @onclick=@SpeechAsync>@Word.Text</div>
+            <div class="word montserrat-900" @onclick=@TapWord>@Word.Text</div>
             <div class="stars">
                 <LevelStars Level="@Word.Level" />
             </div>
@@ -53,7 +54,7 @@
         <Animate Animation="Animations.SlideDown">
             <div class="word-notification" @onclick=@ChangeSilentModeSetting>
                 <button class="btn-icon">
-                    @if (_stateContainer.IsSilent)
+                    @if (_stateContainer.IsSilentMode)
                     {
                         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -84,15 +85,19 @@
     public bool IsAlwaysShow { get; set; } = false;
 
     private bool isShowAnswer { get; set; }
-    private PersistentStateContainer _stateContainer;
+    private PersistentSettingContainer _stateContainer;
     private bool _showNotification = false;
     protected override async Task OnInitializedAsync()
     {
-        _stateContainer = await Persistencer.GetAsync(PersistentType.Word);
-        _showNotification = _stateContainer.IsSilent;
-        if (_showNotification)
+        _stateContainer = await Persistencer.GetAsync(PersistentType.Setting);
+        if (!AppStateContainer.SilentModeNotificationConfirm && _stateContainer.IsSilentMode)
         {
-            Hide();
+            _showNotification = _stateContainer.IsSilentMode;
+            if (_showNotification)
+            {
+                Hide();
+            }
+            AppStateContainer.SilentModeNotificationConfirm = true;
         }
     }
 
@@ -122,9 +127,18 @@
         await SpeechAsync();
     }
 
+    private async Task TapWord()
+    {
+        if (_stateContainer.IsSilentMode)
+        {
+            _showNotification = true;
+        }
+        await SpeechAsync();
+    }
+
     private async Task SpeechAsync()
     {
-        if (_stateContainer.IsSilent)
+        if (_stateContainer.IsSilentMode)
         {
             return;
         }
@@ -133,8 +147,8 @@
 
     private async Task ChangeSilentModeSetting()
     {
-        _stateContainer.IsSilent = !_stateContainer.IsSilent;
-        await Persistencer.SaveAsync(PersistentType.Word, _stateContainer);
+        _stateContainer.IsSilentMode = !_stateContainer.IsSilentMode;
+        await Persistencer.SaveAsync(PersistentType.Setting, _stateContainer);
         StateHasChanged();
         Hide();
     }

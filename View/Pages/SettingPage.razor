@@ -1,1 +1,47 @@
 ﻿@page "/settings"
+@inject IPersistencer<PersistentSettingContainer> Persistencer
+<Animate Animation="Animations.FadeUp" class="animation-wrapper">
+    <div class="wrapper">
+        <div class="settings">
+            <div class="item">
+                サイレントモード
+                <label for="today-only-switch-1" class="toggle-switchy" data-style="rounded" data-text="true">
+                    <input type="checkbox" id="today-only-switch-1" @bind=@isSilentMode>
+                    <span class="toggle">
+                        <span class="switch"></span>
+                    </span>
+                </label>
+            </div>
+        </div>
+        <button class="btn" @onclick=@SaveAsync>保存する</button>
+    </div>
+</Animate>
+@if (_showNotification)
+{
+    <div class="notification-wrapper">
+        <Animate Animation="Animations.SlideDown">
+            <div class="notification">保存しました</div>
+        </Animate>
+    </div>
+}
+@code {
+    private PersistentSettingContainer _stateContainer;
+    private bool _showNotification;
+
+    private bool isSilentMode { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _stateContainer = await Persistencer.GetAsync(PersistentType.Setting);
+        isSilentMode = _stateContainer.IsSilentMode;
+    }
+
+    private async Task SaveAsync()
+    {
+        _showNotification = true;
+        _stateContainer.IsSilentMode = isSilentMode;
+        await Persistencer.SaveAsync(PersistentType.Setting, _stateContainer);
+        await Task.Delay(3000);
+        _showNotification = false;
+    }
+}

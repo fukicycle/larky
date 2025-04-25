@@ -20,9 +20,10 @@ builder.Services.AddKeyedSingleton(typeof(IRepository<UserDTO, string>), nameof(
 builder.Services.AddKeyedSingleton(typeof(IRepository<WordDTO, string>), nameof(FirebaseScheme.Words), new FirebaseRepository<WordDTO,string>(FirebaseScheme.Words));
 builder.Services.AddKeyedSingleton(typeof(IRepository<RankingDTO, int>), nameof(FirebaseScheme.Rankings), new FirebaseRepository<RankingDTO,int>(FirebaseScheme.Rankings));
 builder.Services.AddKeyedSingleton(typeof(IRepository<BadgeDTO, string>), nameof(FirebaseScheme.Badges), new FirebaseRepository<BadgeDTO, string>(FirebaseScheme.Badges));
-builder.Services.AddScoped<IPersistencer<PersistentStateContainer>, LocalStorageService<PersistentStateContainer>>();
 builder.Services.AddScoped<WordService>();
-builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddSingleton<IPersistencer<PersistentStateContainer>, LocalStorageService<PersistentStateContainer>>();
+builder.Services.AddSingleton<IPersistencer<PersistentSettingContainer>, LocalStorageService<PersistentSettingContainer>>();
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddSingleton<AppStateContainer>();
 
 await builder.Build().RunAsync();

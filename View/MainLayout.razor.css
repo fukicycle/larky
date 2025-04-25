@@ -15,5 +15,5 @@ header {
 
 main {
     padding: 0 4px;
-    overflow: auto;
+    overflow: hidden;
 }

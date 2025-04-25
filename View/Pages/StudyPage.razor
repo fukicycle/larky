@@ -2,7 +2,7 @@
 @inject WordService WordService
 @inject IPersistencer<PersistentStateContainer> Persistencer
 @implements IDisposable
-<Animate Animation="Animations.Fade" class="animation-wrapper">
+<Animate Animation="Animations.FadeUp" class="animation-wrapper">
     @if (_pager == null)
     {
         <div class="loading">
@@ -12,7 +12,6 @@
     else
     {
         <div class="contents">
-            <h3>これはデモページです。5秒で自動的に進みます</h3>
             <div class="progress">
                 <ProgressBar Current="@(_pager.CurrentValue.CurrentIndex + 1)" Total="@_pager.CurrentValue.Count" />
             </div>
@@ -31,30 +30,11 @@
         var results = await WordService.GetWordsAsync(maxLevel: Level ?? 1);
         _pager = new GroupPager<WordDTO>(results, 10);
         _container = await Persistencer.GetAsync(PersistentType.Word);
-        _pager.Move(_container.WordCurrentIndex);
-        int delay = 5000;
-        _ = Task.Run(async () =>
-        {
-            while (_pager.CanGoNext() && _isRunning)
-            {
-                while (_pager.CurrentValue.CanGoNext() && _isRunning)
-                {
-                    await Task.Delay(delay);
-                    _pager.CurrentValue.GoNext();
-                    await InvokeAsync(StateHasChanged);
-                }
-                await Task.Delay(delay);
-                _pager.GoNext();
-                await InvokeAsync(StateHasChanged);
-            }
-        });
+        _pager.Move(_container.StudyCurrentIndex);
     }
-
-    private bool _isRunning = true;
 
     public async void Dispose()
     {
-        _isRunning = false;
         _container.StudyCurrentIndex = _pager?.CurrentIndex ?? 0;
         await Persistencer.SaveAsync(PersistentType.Word, _container);
     }

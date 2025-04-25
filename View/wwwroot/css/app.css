@@ -24,6 +24,7 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
     appearance: none;
     -webkit-appearance: none;
+    color: var(--primary-font-color);
 }
 
 .title {
@@ -107,4 +108,5 @@ body {
 
 .animation-wrapper {
     height: 100%;
+    overflow: hidden;
 }
