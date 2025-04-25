@@ -2,7 +2,7 @@
 @inject WordService WordService
 @inject IPersistencer<PersistentStateContainer> Persistencer
 @implements IDisposable
-<Animate Animation="Animations.Fade" class="animation-wrapper">
+<Animate Animation="Animations.FadeUp" class="animation-wrapper">
     @if (_pager == null)
     {
         <div class="loading">
@@ -12,50 +12,39 @@
     else
     {
         <div class="contents">
-            <h3>これはデモページです。5秒で自動的に進みます</h3>
             <div class="progress">
                 <ProgressBar Current="@(_pager.CurrentValue.CurrentIndex + 1)" Total="@_pager.CurrentValue.Count" />
             </div>
-            <WordCard IsAlwaysShow="false" Word="@_pager.CurrentValue.CurrentValue" />
+            <WordCard IsAlwaysShow="false" Word="@_pager.CurrentValue.CurrentValue" ButtonOnClick="ButtonOnClick" />
         </div>
     }
 </Animate>
 @code {
     [SupplyParameterFromQuery(Name = "level")]
-    public int Level { get; set; } = 1;
+    public int? Level { get; set; }
     private GroupPager<WordDTO>? _pager;
     private PersistentStateContainer _container;
 
     protected override async Task OnInitializedAsync()
     {
-        var results = await WordService.GetWordsAsync(maxLevel: Level);
+        var results = await WordService.GetWordsAsync(maxLevel: Level ?? 1);
         _pager = new GroupPager<WordDTO>(results, 10);
         _container = await Persistencer.GetAsync(PersistentType.Word);
-        _pager.Move(_container.WordCurrentIndex);
-        int delay = 5000;
-        _ = Task.Run(async () =>
-        {
-            while (_pager.CanGoNext() && _isRunning)
-            {
-                while (_pager.CurrentValue.CanGoNext() && _isRunning)
-                {
-                    await Task.Delay(delay);
-                    _pager.CurrentValue.GoNext();
-                    await InvokeAsync(StateHasChanged);
-                }
-                await Task.Delay(delay);
-                _pager.GoNext();
-                await InvokeAsync(StateHasChanged);
-            }
-        });
+        _pager.Move(_container.StudyCurrentIndex);
     }
-
-    private bool _isRunning = true;
 
     public async void Dispose()
     {
-        _isRunning = false;
         _container.StudyCurrentIndex = _pager?.CurrentIndex ?? 0;
         await Persistencer.SaveAsync(PersistentType.Word, _container);
+    }
+
+    private void ButtonOnClick(bool result)
+    {
+        if (_pager?.CurrentValue?.CanGoNext() == true)
+        {
+            _pager.CurrentValue.GoNext();
+            _ = Task.Run(async () => await Task.Delay(500));//simulate to send result to firebase
+        }
     }
 }

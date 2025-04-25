@@ -1,56 +1,117 @@
 ﻿@inject SpeechSynthesis SpeechSynthesis
+@inject IPersistencer<PersistentSettingContainer> Persistencer
+@inject AppStateContainer AppStateContainer
 <div class="word-card-wrapper">
-    <div class="word-card">
-        <div class="word montserrat-900" @onclick=@SpeechAsync>@Word.Text</div>
-        <div class="stars">
-            <LevelStars Level="@Word.Level" />
-        </div>
-        <div class="detail">
-            <div class="mean">@Word.Meaning</div>
-            <div class="examples">
-                <div class="en montserrat-400">@Word.ExampleOfEnglish</div>
-                <div class="jp">@Word.ExampleOfJapanese</div>
+    <Animate Animation="Animations.Fade">
+        <div class="word-card">
+            <div class="word montserrat-900" @onclick=@TapWord>@Word.Text</div>
+            <div class="stars">
+                <LevelStars Level="@Word.Level" />
             </div>
-            <div class="actions">
-                @if (!IsAlwaysShow)
-                {
-                    <button class="btn-icon">
-                        <svg width="48" height="55" viewBox="0 0 48 55" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_694_107)">
+            <div class="detail">
+                <div class="mean">@Word.Meaning</div>
+                <div class="examples">
+                    <div class="en montserrat-400">@Word.ExampleOfEnglish</div>
+                    <div class="jp">@Word.ExampleOfJapanese</div>
+                </div>
+                <div class="actions">
+                    @if (!IsAlwaysShow)
+                    {
+                        <button class="btn-icon" @onclick=@NotifyOKButtonOnClick>
+                            <svg width="48" height="55" viewBox="0 0 48 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_694_107)">
+                                    <path
+                                        d="M46.9929 11.3223C48.3322 12.665 48.3322 14.8457 46.9929 16.1885L19.5643 43.6885C18.225 45.0313 16.05 45.0313 14.7107 43.6885L0.996438 29.9385C-0.342848 28.5957 -0.342848 26.415 0.996438 25.0723C2.33572 23.7295 4.51072 23.7295 5.85001 25.0723L17.1429 36.3838L42.15 11.3223C43.4893 9.97949 45.6643 9.97949 47.0036 11.3223H46.9929Z"
+                                        fill="#599071" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_694_107">
+                                        <rect width="48" height="55" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                        </button>
+                        <button class="btn-icon" @onclick=@NotifyNGButtonOnClick>
+                            <svg width="48" height="64" viewBox="0 0 48 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                    d="M46.9929 11.3223C48.3322 12.665 48.3322 14.8457 46.9929 16.1885L19.5643 43.6885C18.225 45.0313 16.05 45.0313 14.7107 43.6885L0.996438 29.9385C-0.342848 28.5957 -0.342848 26.415 0.996438 25.0723C2.33572 23.7295 4.51072 23.7295 5.85001 25.0723L17.1429 36.3838L42.15 11.3223C43.4893 9.97949 45.6643 9.97949 47.0036 11.3223H46.9929Z"
-                                    fill="#599071" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_694_107">
-                                    <rect width="48" height="55" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                    </button>
-                    <button class="btn-icon">
-                        <svg width="48" height="64" viewBox="0 0 48 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M42.825 18.8251C44.3875 17.2626 44.3875 14.7251 42.825 13.1626C41.2625 11.6001 38.725 11.6001 37.1625 13.1626L24 26.3376L10.825 13.1751C9.26251 11.6126 6.72501 11.6126 5.16251 13.1751C3.60001 14.7376 3.60001 17.2751 5.16251 18.8376L18.3375 32.0001L5.17501 45.1751C3.61251 46.7376 3.61251 49.2751 5.17501 50.8376C6.73751 52.4001 9.27501 52.4001 10.8375 50.8376L24 37.6626L37.175 50.8251C38.7375 52.3876 41.275 52.3876 42.8375 50.8251C44.4 49.2626 44.4 46.7251 42.8375 45.1626L29.6625 32.0001L42.825 18.8251Z"
-                                fill="#B24C47" />
-                        </svg>
-                    </button>
+                                    d="M42.825 18.8251C44.3875 17.2626 44.3875 14.7251 42.825 13.1626C41.2625 11.6001 38.725 11.6001 37.1625 13.1626L24 26.3376L10.825 13.1751C9.26251 11.6126 6.72501 11.6126 5.16251 13.1751C3.60001 14.7376 3.60001 17.2751 5.16251 18.8376L18.3375 32.0001L5.17501 45.1751C3.61251 46.7376 3.61251 49.2751 5.17501 50.8376C6.73751 52.4001 9.27501 52.4001 10.8375 50.8376L24 37.6626L37.175 50.8251C38.7375 52.3876 41.275 52.3876 42.8375 50.8251C44.4 49.2626 44.4 46.7251 42.8375 45.1626L29.6625 32.0001L42.825 18.8251Z"
+                                    fill="#B24C47" />
+                            </svg>
+                        </button>
+                    }
+                </div>
+                @if (!isShowAnswer)
+                {
+                    <div class="panel" @onclick=@SwitchDisplayMode>タップして詳細を表示</div>
                 }
             </div>
-            @if (!isShowAnswer)
-            {
-                <div class="panel" @onclick=@SwitchDisplayMode>タップして詳細を表示</div>
-            }
         </div>
-    </div>
+    </Animate>
 </div>
+@if (_showNotification)
+{
+    <div class="word-notification-wrapper">
+        <Animate Animation="Animations.SlideDown">
+            <div class="word-notification" @onclick=@ChangeSilentModeSetting>
+                <button class="btn-icon">
+                    @if (_stateContainer.IsSilentMode)
+                    {
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.454 12.6259L7.414 4.58592L4.586 7.41392L40.586 43.4139L43.414 40.5859L39.374 36.5459C42.3719 33.0549 44.0132 28.6015 43.998 23.9999C43.998 15.8179 39.054 9.09392 32 5.99992V9.99992C36.774 12.7719 39.998 18.0939 39.998 23.9999C39.9877 27.5531 38.8139 31.0051 36.656 33.8279L34.084 31.2559C35.288 29.0719 36 26.3799 36 23.9999C36 20.4579 34.45 16.1999 32 13.9999V29.1719L28 25.1719V4.26392L15.454 12.6259ZM8 33.9999H13.394L28 43.7359V36.2419L6.204 14.4459C5.5445 14.7773 4.98955 15.2847 4.60056 15.912C4.21157 16.5392 4.00372 17.2618 4 17.9999V29.9999C4 32.2059 5.794 33.9999 8 33.9999Z"
+                                fill="#599071" />
+                        </svg>
+                    }
+                    else
+                    {
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M32 42C39.054 38.906 43.998 32.182 43.998 24C43.998 15.818 39.054 9.094 32 6V10C36.774 12.772 39.998 18.094 39.998 24C39.998 29.906 36.774 35.228 32 38V42Z"
+                                fill="#599071" />
+                            <path
+                                d="M32 13.9999V33.9999C34.45 31.7999 36 27.5419 36 23.9999C36 20.4579 34.45 16.1999 32 13.9999ZM8 33.9999H13.394L28 43.7359V4.26392L13.394 13.9999H8C5.794 13.9999 4 15.7939 4 17.9999V29.9999C4 32.2059 5.794 33.9999 8 33.9999Z"
+                                fill="#599071" />
+                        </svg>
+                    }
+                </button>
+            </div>
+        </Animate>
+    </div>
+}
 @code {
     [Parameter]
     public WordDTO Word { get; set; } = null!;
     [Parameter]
     public bool IsAlwaysShow { get; set; } = false;
+    [Parameter]
+    public EventCallback<bool> ButtonOnClick { get; set; }
 
     private bool isShowAnswer { get; set; }
+    private PersistentSettingContainer _stateContainer;
+    private bool _showNotification = false;
+    protected override async Task OnInitializedAsync()
+    {
+        _stateContainer = await Persistencer.GetAsync(PersistentType.Setting);
+        if (!AppStateContainer.SilentModeNotificationConfirm && _stateContainer.IsSilentMode)
+        {
+            _showNotification = _stateContainer.IsSilentMode;
+            if (_showNotification)
+            {
+                Hide();
+            }
+            AppStateContainer.SilentModeNotificationConfirm = true;
+        }
+    }
+
+    private async Task NotifyOKButtonOnClick()
+    {
+        await ButtonOnClick.InvokeAsync(true);
+    }
+
+    private async Task NotifyNGButtonOnClick()
+    {
+        await ButtonOnClick.InvokeAsync(false);
+    }
 
     private void SwitchDisplayMode()
     {
@@ -78,8 +139,55 @@
         await SpeechAsync();
     }
 
+    private async Task TapWord()
+    {
+        if (_stateContainer.IsSilentMode)
+        {
+            _showNotification = true;
+        }
+        await SpeechAsync();
+    }
+
     private async Task SpeechAsync()
     {
+        if (_stateContainer.IsSilentMode)
+        {
+            return;
+        }
         await SpeechSynthesis.SpeakAsync(Word.Text);
+    }
+
+    private async Task ChangeSilentModeSetting()
+    {
+        _stateContainer.IsSilentMode = !_stateContainer.IsSilentMode;
+        await Persistencer.SaveAsync(PersistentType.Setting, _stateContainer);
+        StateHasChanged();
+        Hide();
+    }
+
+    private DateTime _closeDateTime;
+    private bool _isRunning = false;
+    private void Hide()
+    {
+        _closeDateTime = DateTime.Now.AddSeconds(3);
+        if (!_isRunning)
+        {
+            HideProcessing();
+        }
+    }
+
+    private void HideProcessing()
+    {
+        _isRunning = true;
+        Task.Run(async () =>
+        {
+            while (_closeDateTime >= DateTime.Now)
+            {
+                await Task.Delay(1000);
+            }
+            _showNotification = false;
+            _isRunning = false;
+            await InvokeAsync(StateHasChanged);
+        });
     }
 }
