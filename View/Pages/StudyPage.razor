@@ -22,13 +22,13 @@
 </Animate>
 @code {
     [SupplyParameterFromQuery(Name = "level")]
-    public int Level { get; set; } = 1;
+    public int? Level { get; set; }
     private GroupPager<WordDTO>? _pager;
     private PersistentStateContainer _container;
 
     protected override async Task OnInitializedAsync()
     {
-        var results = await WordService.GetWordsAsync(maxLevel: Level);
+        var results = await WordService.GetWordsAsync(maxLevel: Level ?? 1);
         _pager = new GroupPager<WordDTO>(results, 10);
         _container = await Persistencer.GetAsync(PersistentType.Word);
         _pager.Move(_container.WordCurrentIndex);
