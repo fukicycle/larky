@@ -144,6 +144,7 @@
         if (_stateContainer.IsSilentMode)
         {
             _showNotification = true;
+            Hide();
         }
         await SpeechAsync();
     }
