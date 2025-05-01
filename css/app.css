@@ -1,0 +1,112 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --background-gradient: linear-gradient(180deg, rgba(112, 175, 147, 1) 40%, rgba(211, 224, 185, 1) 100%);
+    --accent-color: #599071;
+    --accent-font-color: #F5F7EA;
+    --primary-color: #F7FAEF;
+    --primary-font-color: #21302B;
+}
+
+html,
+body,
+#app {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: var(--background-gradient);
+    padding-bottom: env(safe-area-inset-bottom);
+    appearance: none;
+    -webkit-appearance: none;
+    color: var(--primary-font-color);
+}
+
+.title {
+    color: #F6F9EE;
+    font-size: 36px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.zen-maru-gothic-regular {
+    font-family: "Zen Maru Gothic", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.zen-maru-gothic-bold {
+    font-family: "Zen Maru Gothic", serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.montserrat-400 {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.montserrat-900 {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 900;
+    font-style: normal;
+}
+
+.splash {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-direction: column;
+}
+
+.btn-icon {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    width: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    cursor: pointer;
+    border: solid 1px var(--accent-color);
+    outline: none;
+    background-color: var(--accent-color);
+    color: var(--accent-font-color);
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .25);
+    padding: 12px 4px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: inherit;
+}
+
+.btn:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .15);
+}
+
+.btn:disabled {
+    opacity: .7;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .25) !important;
+}
+
+.animation-wrapper {
+    height: 100%;
+    overflow: hidden;
+}
