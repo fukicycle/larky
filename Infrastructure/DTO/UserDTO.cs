@@ -10,7 +10,7 @@ public sealed class UserDTO : DTO<UserDTO, string>
         string? email,
         int unlockLevel,
         Dictionary<Guid, ProgressDTO>? progresses,
-        Dictionary<Guid, BadgeDTO>? badges)
+        Dictionary<Guid, CollectedBadgeDTO>? badges)
     {
         Id = id;
         Name = name;
@@ -23,7 +23,7 @@ public sealed class UserDTO : DTO<UserDTO, string>
         Progresses = progresses;
         if (badges == null)
         {
-            badges = new Dictionary<Guid, BadgeDTO>();
+            badges = new Dictionary<Guid, CollectedBadgeDTO>();
         }
         Badges = badges;
         FirstOrderKey = name;
@@ -33,7 +33,7 @@ public sealed class UserDTO : DTO<UserDTO, string>
     public string? Email { get; }
     public int UnlockLevel { get; }
     public Dictionary<Guid, ProgressDTO> Progresses { get; }
-    public Dictionary<Guid, BadgeDTO> Badges { get; }
+    public Dictionary<Guid, CollectedBadgeDTO> Badges { get; }
 
     protected override bool EqualsCore(UserDTO other)
     {

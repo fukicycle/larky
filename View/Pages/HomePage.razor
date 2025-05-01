@@ -1,4 +1,72 @@
 ﻿@page "/"
-<div>開発中</div>
+@inject UserService UserService
+@if (isFirstUseOnThisBrowse)
+{
+    <div class="fullscreen-wrapper">
+        <Animate Animation="Animations.FadeIn">
+            <div class="welcome">
+                <div class="main">
+                    <div>ようこそ</div>
+                    <div><span class="title">Larky</span>の世界へ！</div>
+                </div>
+                <div class="description">
+                    <p>英語をもっと気軽に勉強したい。</p>
+                    <p>そんなあなたにお届けする「Larky」。</p>
+                    <p>面倒なアカウント登録は全て忘れて一緒に始めましょう！</p>
+                    <p>個人開発だからあなたの要望も実装されるかも？</p>
+                    <p>毎日10問一緒に頑張ってみませんか？</p>
+                </div>
+                <div class="actions">
+                    <button class="btn" @onclick=@CreateUser>始める</button>
+                    <p>または</p>
+                    <button class="btn">移行パスをお持ちの方(未実装)</button>
+                </div>
+                <div>※開発中につき作成できません</div>
+            </div>
+        </Animate>
+    </div>
+}
+<Animate Animation="Animations.Fade" class="animation-wrapper">
+    <div class="home">
+        <div>@Greeting.GetCreeting()</div>
+        <div>@loginUser?.Name</div>
+        <div><span>レベル</span>@loginUser?.UnlockLevel</div>
+        <div>獲得したバッジ</div>
+        <div class="badges">
+            @if (loginUser == null)
+            {
+                <div>-</div>
+            }
+            else
+            {
+                @foreach (var badge in @loginUser.Badges.Values.Select(a => a.IconPath))
+                {
+                    <Badge IconPath="@badge" />
+                }
+            }
+        </div>
+    </div>
+</Animate>
 @code {
+    private UserDTO? loginUser { get; set; }
+    private bool isFirstUseOnThisBrowse { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await UserService.InitializeAsync();
+        await CheckUserAsync();
+    }
+
+    private async Task CreateUser()
+    {
+#if DEBUG
+var id = await UserService.CreateAsync();
+await CheckUserAsync();
+#endif
+    }
+
+    private async Task CheckUserAsync()
+    {
+        loginUser = await UserService.GetAsync();
+        isFirstUseOnThisBrowse = loginUser == null;
+    }
 }

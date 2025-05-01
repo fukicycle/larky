@@ -1,7 +1,7 @@
 ﻿<div class="wrapper">
-    <img src="@BadgeDTO.IconPath" />
+    <img src="@IconPath" />
 </div>
 @code {
     [Parameter]
-    public BadgeDTO BadgeDTO { get; set; } = null!;
+    public string IconPath { get; set; } = null!;
 }
