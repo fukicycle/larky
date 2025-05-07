@@ -27,6 +27,10 @@ public sealed class ItemPager<T> : IPager<T>
 
     public void GoNext()
     {
+        if(!CanGoNext())
+        {
+            return;
+        }
         CurrentIndex++;
         CurrentValue = _items[CurrentIndex];
     }
@@ -38,17 +42,22 @@ public sealed class ItemPager<T> : IPager<T>
 
     public void GoPrevious()
     {
+        if(!CanGoPrevious())
+        {
+            return;
+        }
         CurrentIndex--;
         CurrentValue = _items[CurrentIndex];
     }
 
-    public void Move(int index)
+    public bool Move(int index)
     {
-        if(index >= _items.Count)
+        if (index >= _items.Count || index < 0)
         {
-            return;
+            return false;
         }
         CurrentIndex = index;
         CurrentValue = _items[CurrentIndex];
+        return true;
     }
 }

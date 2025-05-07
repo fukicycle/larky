@@ -9,5 +9,5 @@ public interface IPager<T>
     bool CanGoPrevious();
     void GoNext();
     void GoPrevious();
-    void Move(int index);
+    bool Move(int index);
 }
