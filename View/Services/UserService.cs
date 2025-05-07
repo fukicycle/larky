@@ -26,7 +26,7 @@ public sealed class UserService
 
     public async Task<Guid> CreateAsync()
     {
-        var nickname = Nickname.Get();
+        var nickname = Nickname.Generate();
         var id = Guid.NewGuid();
         var userDTO = new UserDTO(id, nickname, null, 1, null, null);
         await _usersRepository.UpdateItemAsync(id, userDTO);
