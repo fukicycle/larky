@@ -2,7 +2,7 @@ namespace Domain.Logics;
 
 public static class Greeting
 {
-    public static string GetCreeting()
+    public static string GetGreeting()
     {
         var currentTime = DateTime.Now.TimeOfDay;
         if (currentTime >= TimeSpan.FromHours(2) && currentTime <= TimeSpan.FromHours(10))
