@@ -4,10 +4,10 @@
 <div class="word-card-wrapper">
     <Animate Animation="Animations.Fade">
         <div class="word-card">
-            <div class="word montserrat-900" @onclick=@TapWord>@Word.Text</div>
             <div class="stars">
                 <LevelStars Level="@Word.Level" />
             </div>
+            <div class="word montserrat-900" @onclick=@TapWord>@Word.Text</div>
             <div class="detail">
                 <div class="mean">@Word.Meaning</div>
                 <div class="examples">
@@ -65,12 +65,8 @@
                     else
                     {
                         <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M32 42C39.054 38.906 43.998 32.182 43.998 24C43.998 15.818 39.054 9.094 32 6V10C36.774 12.772 39.998 18.094 39.998 24C39.998 29.906 36.774 35.228 32 38V42Z"
-                                fill="#599071" />
-                            <path
-                                d="M32 13.9999V33.9999C34.45 31.7999 36 27.5419 36 23.9999C36 20.4579 34.45 16.1999 32 13.9999ZM8 33.9999H13.394L28 43.7359V4.26392L13.394 13.9999H8C5.794 13.9999 4 15.7939 4 17.9999V29.9999C4 32.2059 5.794 33.9999 8 33.9999Z"
-                                fill="#599071" />
+                            <path d="M32 42C39.054 38.906 43.998 32.182 43.998 24C43.998 15.818 39.054 9.094 32 6V10C36.774 12.772 39.998 18.094 39.998 24C39.998 29.906 36.774 35.228 32 38V42Z" fill="#599071" />
+                            <path d="M32 13.9999V33.9999C34.45 31.7999 36 27.5419 36 23.9999C36 20.4579 34.45 16.1999 32 13.9999ZM8 33.9999H13.394L28 43.7359V4.26392L13.394 13.9999H8C5.794 13.9999 4 15.7939 4 17.9999V29.9999C4 32.2059 5.794 33.9999 8 33.9999Z" fill="#599071" />
                         </svg>
                     }
                 </button>

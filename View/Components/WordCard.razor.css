@@ -18,16 +18,16 @@
 }
 
 .word {
-    padding: 32px 0;
     padding-bottom: 16px;
     color: inherit;
     font-size: 32px;
     text-align: center;
     overflow: auto;
+    padding: 16px;
 }
 
 .stars {
-    padding: 16px;
+    padding: 32px 0;
 }
 
 .mean {
