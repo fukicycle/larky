@@ -1,0 +1,66 @@
+﻿@inject NavigationManager Navigation
+@implements IDisposable
+
+@if (_showDialog)
+{
+    <div class="dialog-background">
+        <Animate Animation="Animations.Fade" Duration="@TimeSpan.FromSeconds(.2)">
+            <div class="dialog">
+                <p>学習中です！</p>
+                <p>ページを離れると学習結果は保存されません！</p>
+                <div class="actions">
+                    <button class="btn btn-dialog" @onclick=@ConfirmNavigation>移動する</button>
+                    <button class="btn btn-dialog" @onclick=@CancelNavigation>キャンセル</button>
+                </div>
+            </div>
+        </Animate>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Func<bool>? ShouldBlockNavigation { get; set; }
+
+    private LocationChangingContext? _pendingContext;
+    private bool _showDialog;
+    private IDisposable? _registration;
+    private bool _isNavigating;
+
+    protected override void OnInitialized()
+    {
+        _registration = Navigation.RegisterLocationChangingHandler(OnLocationChanging);
+    }
+
+    private ValueTask OnLocationChanging(LocationChangingContext context)
+    {
+        if (ShouldBlockNavigation?.Invoke() == true && !_isNavigating)
+        {
+            context.PreventNavigation();
+            _pendingContext = context;
+            _showDialog = true;
+            StateHasChanged();
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    private void ConfirmNavigation()
+    {
+        _showDialog = false;
+        _isNavigating = true;
+        Navigation.NavigateTo(_pendingContext?.TargetLocation ?? Navigation.Uri);
+        _isNavigating = false;
+        _pendingContext = null;
+    }
+
+    private void CancelNavigation()
+    {
+        _showDialog = false;
+        _pendingContext = null;
+    }
+
+    public void Dispose()
+    {
+        _registration?.Dispose();
+    }
+}

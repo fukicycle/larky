@@ -19,12 +19,12 @@
         </div>
     }
 </Animate>
+<NavigationGuard ShouldBlockNavigation="@IsStudying" />
 @code {
     [SupplyParameterFromQuery(Name = "level")]
     public int? Level { get; set; }
     private GroupPager<WordDTO>? _pager;
     private PersistentStateContainer _container;
-
     protected override async Task OnInitializedAsync()
     {
         var results = await WordService.GetWordsAsync(maxLevel: Level ?? 1);
@@ -46,5 +46,11 @@
             _pager.CurrentValue.GoNext();
             _ = Task.Run(async () => await Task.Delay(500));//simulate to send result to firebase
         }
+    }
+
+    private bool IsStudying()
+    {
+        var currentIndex = _pager?.CurrentValue?.CurrentIndex ?? 0;
+        return currentIndex > 0;
     }
 }
