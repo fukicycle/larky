@@ -23,12 +23,12 @@
     </div>
 </Animate>
 @code {
-    private ItemPager<WordDTO>? _pager;
+    private ItemPager<Word>? _pager;
     private PersistentStateContainer _container;
     protected override async Task OnInitializedAsync()
     {
         var results = await WordService.GetWordsAsync();
-        _pager = new ItemPager<WordDTO>(results);
+        _pager = new ItemPager<Word>(results.ToDomain());
         _container = await Persistencer.GetAsync(PersistentType.Word);
         _pager.Move(_container.WordCurrentIndex);
     }
